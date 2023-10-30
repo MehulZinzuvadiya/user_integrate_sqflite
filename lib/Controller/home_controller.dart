@@ -37,49 +37,6 @@ class HomeController {
 
   DataController dataController = Get.put(DataController());
 
-  // Future<void> setData() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   encodeData = json.encode(userList);
-  //   await prefs.setString("dataList", encodeData!);
-  // }
-
-  // Future<void> getData() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   decodeData = await prefs.getString('dataList');
-  //   userList = json.decode(decodeData!);
-  // }
-
-  // void addUser() {
-  //   userList.add({
-  //     "name": txt_name.text,
-  //     "email": txt_email.text,
-  //     "password": txt_password.text,
-  //     "age": age,
-  //     "Dob": DateFormat("d/M/yyyy").format(selectedDate),
-  //     "date": selectedDate.toString(),
-  //     // "Dob": selectedDate,
-  //   });
-  //   setData();
-  // }
-  //
-  // void updateUser(int index) {
-  //   userList[index] = ({
-  //     "name": txtup_name.text,
-  //     "email": txtup_email.text,
-  //     "Dob": DateFormat("d/M/yyyy").format(selectedDate),
-  //     "password": txtup_password.text,
-  //     "confirm": txtup_confirmPass,
-  //     "age": age,
-  //     "date": selectedDate.toString(),
-  //   });
-  //   setData();
-  // }
-  //
-  // void deleteData(int index) {
-  //   userList.removeAt(index);
-  //   setData();
-  // }
-
   String? getUser(String email, String password) {
     for (var user in dataController.datalist) {
       us_email = user['email'];

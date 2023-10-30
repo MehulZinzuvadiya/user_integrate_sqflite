@@ -233,6 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               //                 BorderRadius.circular(15)))),
 
                               onPressed: () {
+                                dataController.readData();
                                 if (HomeController.homecontroller.isUpdate ==
                                     true) {
                                   if (updateformkey.currentState!.validate()) {

@@ -28,7 +28,9 @@ class _UserDetailState extends State<UserDetail> {
         child: Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
-        onPressed: () {},
+        onPressed: () {
+          // dataController.sortData();
+        },
         child: const Icon(Icons.sync),
       ),
       body: Padding(

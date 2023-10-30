@@ -67,7 +67,6 @@ class DBHelper {
   Future<List<Map>> getUsersByDate() async {
     database = await checkDB();
     List<Map> list = await database!.query('user', orderBy: 'dob DESC');
-    await database!.close();
 
     return list;
   }
