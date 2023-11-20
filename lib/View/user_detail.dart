@@ -169,7 +169,6 @@ class _UserDetailState extends State<UserDetail> {
                                     text: dataController.datalist[index]
                                         ['password'],
                                   );
-
                                   HomeController.homecontroller.tabController
                                       .animateTo(1);
                                 });
