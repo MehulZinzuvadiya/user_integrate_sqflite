@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:user_integrate_sqflite/Controller/data_controller.dart';
+import 'package:user_integrate_sqflite/Service/database_service.dart';
 
 import '../Controller/home_controller.dart';
 
@@ -92,73 +93,79 @@ class _LoginScreenState extends State<LoginScreen> {
                                   shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               )),
-                              onPressed: () {
-                                if (formkey.currentState!.validate()) {
-                                  bool isUserValid = false;
+                              onPressed: () async {
+                                // if (formkey.currentState!.validate()) {
+                                //   bool isUserValid = false;
+                                //
+                                //   for (Map user in controller.datalist) {
+                                //     if (user["email"] ==
+                                //             HomeController.homecontroller
+                                //                 .txtlogin_email.text &&
+                                //         user["password"] ==
+                                //             HomeController.homecontroller
+                                //                 .txtlogin_password.text) {
+                                //       isUserValid = true;
+                                //       break;
+                                //     }
+                                //   }
+                                String? username = HomeController.homecontroller
+                                    .getUser(
+                                        HomeController
+                                            .homecontroller.txtlogin_email.text,
+                                        HomeController.homecontroller
+                                            .txtlogin_password.text);
 
-                                  for (Map user in controller.datalist) {
-                                    if (user["email"] ==
-                                            HomeController.homecontroller
-                                                .txtlogin_email.text &&
-                                        user["password"] ==
-                                            HomeController.homecontroller
-                                                .txtlogin_password.text) {
-                                      isUserValid = true;
-                                      break;
-                                    }
-                                  }
-                                  String? username =
-                                      HomeController.homecontroller.getUser(
-                                          HomeController.homecontroller
-                                              .txtlogin_email.text,
-                                          HomeController.homecontroller
-                                              .txtlogin_password.text);
+                                Map<String, dynamic>? user = await DBHelper
+                                    .dbHelper
+                                    .getUserByEmailAndPassword(
+                                        HomeController
+                                            .homecontroller.txtlogin_email.text,
+                                        HomeController.homecontroller
+                                            .txtlogin_password.text);
 
-                                  if (isUserValid) {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      content:
-                                          const Text("Login Successfull !!"),
-                                      backgroundColor: Colors.green.shade200,
-                                    ));
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          title: const Text("Welcome Back !!"),
-                                          content: Text("${username}"),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  HomeController.homecontroller
-                                                      .txtlogin_email
-                                                      .clear();
-                                                  HomeController.homecontroller
-                                                      .txtlogin_password
-                                                      .clear();
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text(
-                                                  'OK',
-                                                  style: GoogleFonts.poppins(),
-                                                )),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(
-                                      backgroundColor: Colors.red.shade300,
-                                      content: Text(
-                                        'Invalid email or password',
-                                        style: GoogleFonts.poppins(),
-                                      ),
-                                    ));
-                                  }
+                                if (user != null) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: const Text("Login Successfull !!"),
+                                    backgroundColor: Colors.green.shade200,
+                                  ));
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        title: const Text("Welcome Back !!"),
+                                        content: Text("${user['name']}"),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                HomeController.homecontroller
+                                                    .txtlogin_email
+                                                    .clear();
+                                                HomeController.homecontroller
+                                                    .txtlogin_password
+                                                    .clear();
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'OK',
+                                                style: GoogleFonts.poppins(),
+                                              )),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.red.shade300,
+                                    content: Text(
+                                      'Invalid email or password',
+                                      style: GoogleFonts.poppins(),
+                                    ),
+                                  ));
                                 }
                               },
                               child: Text(

@@ -6,6 +6,7 @@ class HomeController {
   HomeController._();
 
   static final homecontroller = HomeController._();
+
   late TabController tabController;
 
   DateTime selectedDate = DateTime.now();

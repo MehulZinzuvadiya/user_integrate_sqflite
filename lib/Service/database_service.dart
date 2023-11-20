@@ -71,6 +71,20 @@ class DBHelper {
     return list;
   }
 
+  Future<Map<String, dynamic>?> getUserByEmailAndPassword(
+      String email, String password) async {
+    Database? dbClient = await database;
+    List<Map<String, dynamic>> users = await dbClient!.query(
+      'user',
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, password],
+    );
+    if (users.isNotEmpty) {
+      return users.first;
+    }
+    return null;
+  }
+
   void updateData({
     required id,
     required name,

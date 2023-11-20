@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:user_integrate_sqflite/View/register_screen.dart';
 import 'package:user_integrate_sqflite/View/user_detail.dart';
-
 import '../Controller/home_controller.dart';
 import 'login_screen.dart';
 
