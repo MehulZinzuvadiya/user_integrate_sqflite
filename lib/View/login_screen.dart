@@ -94,20 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(15),
                               )),
                               onPressed: () async {
-                                // if (formkey.currentState!.validate()) {
-                                //   bool isUserValid = false;
-                                //
-                                //   for (Map user in controller.datalist) {
-                                //     if (user["email"] ==
-                                //             HomeController.homecontroller
-                                //                 .txtlogin_email.text &&
-                                //         user["password"] ==
-                                //             HomeController.homecontroller
-                                //                 .txtlogin_password.text) {
-                                //       isUserValid = true;
-                                //       break;
-                                //     }
-                                //   }
+
                                 String? username = HomeController.homecontroller
                                     .getUser(
                                         HomeController

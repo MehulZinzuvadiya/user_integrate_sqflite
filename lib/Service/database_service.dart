@@ -22,16 +22,15 @@ class DBHelper {
   Future<Database> createDB() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, "user.db");
-    return openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, version) {
-        String query =
-            "CREATE TABLE user(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,email TEXT,dob TEXT,password TEXT,confirmpass TEXT)";
+    return openDatabase(path, version: 2, onCreate: (db, version) {
+      String query =
+          "CREATE TABLE user(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,email TEXT,dob TEXT,password TEXT,confirmpass TEXT)";
 
-        db.execute(query);
-      },
-    );
+      String subquery =
+          "CREATE TABLE subUser(id INTEGER PRIMARY KEY AUTOINCREMENT,userId INTEGER,name TEXT,email TEXT,dob TEXT,password TEXT)";
+      db.execute(query);
+      db.execute(subquery);
+    });
   }
 
   void insertData({
@@ -51,6 +50,23 @@ class DBHelper {
     });
   }
 
+  void insertsubUser({
+    required name,
+    required email,
+    required dob,
+    required password,
+    required userId,
+  }) async {
+    database = await checkDB();
+    database!.insert("subUser", {
+      "name": name,
+      "email": email,
+      "dob": dob,
+      "password": password,
+      "userId": userId,
+    });
+  }
+
   Future<List<Map>> ReadData() async {
     database = await checkDB();
 
@@ -59,9 +75,22 @@ class DBHelper {
     return list;
   }
 
+  Future<List<Map>> ReadSubUser() async {
+    database = await checkDB();
+
+    String query = "SELECT * FROM subUser";
+    List<Map> subList = await database!.rawQuery(query);
+    return subList;
+  }
+
   Future<void> deleteData({required id}) async {
     database = await checkDB();
     database!.delete("user", where: "id=?", whereArgs: [id]);
+  }
+
+  void deleteSubUser({required id}) async {
+    database = await checkDB();
+    database!.delete("subUser", where: "id=?", whereArgs: [id]);
   }
 
   Future<List<Map>> getUsersByDate() async {
@@ -71,8 +100,7 @@ class DBHelper {
     return list;
   }
 
-  Future<Map<String, dynamic>?> getUserByEmailAndPassword(
-      String email, String password) async {
+  Future<Map<String, dynamic>?> getUserByEmailAndPassword(String email, String password) async {
     Database? dbClient = await database;
     List<Map<String, dynamic>> users = await dbClient!.query(
       'user',
@@ -102,6 +130,21 @@ class DBHelper {
         "password": password,
         "confirmpass": confirmpass,
       },
+      whereArgs: [id],
+      where: "id=?",
+    );
+  }
+
+  void updateSubUser({
+    required id,
+    required name,
+    required email,
+    required dob,
+    required password,
+  }) {
+    database!.update(
+      "subUser",
+      {"name": name, "email": email, "dob": dob, "password": password},
       whereArgs: [id],
       where: "id=?",
     );

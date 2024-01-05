@@ -8,6 +8,7 @@ class HomeController {
   static final homecontroller = HomeController._();
 
   late TabController tabController;
+  int count = 0;
 
   DateTime selectedDate = DateTime.now();
 
@@ -29,8 +30,11 @@ class HomeController {
   String us_email = '';
   String username = '';
   int index = 0;
+  int userIndex = 0;
+  int updateIndex = 0;
 
   bool isUpdate = false;
+  bool isUserUpdate = false;
 
   String? encodeData;
   String? decodeData;
@@ -51,8 +55,6 @@ class HomeController {
   }
 
   bool isAdult(DateTime birthDateString) {
-    String datePattern = "d/M/yyyy";
-
     DateTime birthDate = birthDateString;
     DateTime today = DateTime.now();
 
@@ -66,8 +68,7 @@ class HomeController {
   }
 
   void sort() {
-    dataController.datalist.value
-        .sort((a, b) => (a['age']).compareTo(b['age']));
+    dataController.datalist.value.sort((a, b) => (a['age']).compareTo(b['age']));
   }
 
   int calculateAge(DateTime birthDate) {

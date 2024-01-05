@@ -3,20 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:user_integrate_sqflite/Controller/data_controller.dart';
 import 'package:user_integrate_sqflite/Service/database_service.dart';
 
 import '../Controller/home_controller.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class SubRegisterScreen extends StatefulWidget {
+  const SubRegisterScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<SubRegisterScreen> createState() => _SubRegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _SubRegisterScreenState extends State<SubRegisterScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   GlobalKey<FormState> updateformkey = GlobalKey<FormState>();
 
@@ -28,20 +27,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool passwordVisible1 = false;
 
   TextStyle poppins = GoogleFonts.poppins();
-
-  Future selectDate() async {
-    DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: new DateTime(1920),
-        lastDate: new DateTime(2030));
-    if (picked != null)
-      setState(() => {
-            HomeController.homecontroller.selectedDate = picked,
-            HomeController.homecontroller.intialdateval.text =
-                DateFormat('d/M/yyyy').format(HomeController.homecontroller.selectedDate),
-          });
-  }
 
   DataController dataController = Get.put(DataController());
 
@@ -60,14 +45,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20), color: Colors.blue.shade200),
                   child: Form(
-                    key: HomeController.homecontroller.isUpdate ? updateformkey : formkey,
+                    key: HomeController.homecontroller.isUserUpdate ? updateformkey : formkey,
                     child: Padding(
                       padding: EdgeInsets.all(15),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextFormField(
-                            controller: HomeController.homecontroller.isUpdate
+                            controller: HomeController.homecontroller.isUserUpdate
                                 ? HomeController.homecontroller.txtup_name
                                 : HomeController.homecontroller.txt_name,
                             validator: (value) {
@@ -81,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           TextFormField(
-                            controller: HomeController.homecontroller.isUpdate
+                            controller: HomeController.homecontroller.isUserUpdate
                                 ? HomeController.homecontroller.txtup_email
                                 : HomeController.homecontroller.txt_email,
                             validator: ValidationBuilder().required().email().build(),
@@ -91,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           DateTimeFormField(
-                            initialValue: HomeController.homecontroller.isUpdate
+                            initialValue: HomeController.homecontroller.isUserUpdate
                                 ? HomeController.homecontroller.selectedDate
                                 : null,
                             validator: (value) {
@@ -115,39 +100,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               hintStyle: GoogleFonts.poppins(),
                             ),
                           ),
-                          // TextFormField(
-                          //   autocorrect: false,
-                          //   onChanged: (value) {},
-                          //   controller:
-                          //       HomeController.homecontroller.intialdateval,
-                          //   onSaved: (value) {
-                          //     HomeController.homecontroller.selectedDate =
-                          //         value as DateTime;
-                          //   },
-                          //   onTap: () {
-                          //     selectDate();
-                          //     print(HomeController.homecontroller.age);
-                          //     FocusScope.of(context)
-                          //         .requestFocus(new FocusNode());
-                          //   },
-                          //   validator: (value) {
-                          //     if (value == null) {
-                          //       return 'Please Select date';
-                          //     } else if (HomeController.homecontroller.isAdult(
-                          //             HomeController
-                          //                 .homecontroller.selectedDate) !=
-                          //         true) {
-                          //       return "Age must be 18";
-                          //     }
-                          //   },
-                          //   maxLines: 1,
-                          //   decoration: InputDecoration(
-                          //       icon: const Icon(Icons.calendar_today),
-                          //       hintText: "Select Dob"),
-                          // ),
                           TextFormField(
                             keyboardType: TextInputType.visiblePassword,
-                            controller: HomeController.homecontroller.isUpdate
+                            controller: HomeController.homecontroller.isUserUpdate
                                 ? HomeController.homecontroller.txtup_password
                                 : HomeController.homecontroller.txt_password,
                             validator: (value) {
@@ -171,11 +126,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                           TextFormField(
-                            controller: HomeController.homecontroller.isUpdate
+                            controller: HomeController.homecontroller.isUserUpdate
                                 ? HomeController.homecontroller.txtup_confirmPass
                                 : HomeController.homecontroller.txt_confirmPass,
                             validator: (value) {
-                              if (HomeController.homecontroller.isUpdate == true) {
+                              if (HomeController.homecontroller.isUserUpdate == true) {
                                 if (value != HomeController.homecontroller.txtup_password.text) {
                                   return 'Enter Same Password';
                                 }
@@ -209,27 +164,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 borderRadius: BorderRadius.circular(15),
                               )),
                               onPressed: () {
-                                dataController.readData();
-                                if (HomeController.homecontroller.isUpdate == true) {
+                                // dataController.readData();
+                                if (HomeController.homecontroller.isUserUpdate == true) {
                                   if (updateformkey.currentState!.validate()) {
-                                    HomeController.homecontroller.tabController.animateTo(2);
+                                    Navigator.pop(context);
                                     setState(() {
                                       HomeController.homecontroller.age = HomeController
                                           .homecontroller
                                           .calculateAge(HomeController.homecontroller.selectedDate);
+                                      print("index=${HomeController.homecontroller.index}");
 
-                                      dataController.updateData(
-                                          id: HomeController.homecontroller.index,
+                                      dataController.updateSubUser(
+                                          id: dataController.userIndex,
                                           name: HomeController.homecontroller.txtup_name.text,
                                           email: HomeController.homecontroller.txtup_email.text,
                                           password:
                                               HomeController.homecontroller.txtup_password.text,
-                                          confirmpass:
-                                              HomeController.homecontroller.txtup_confirmPass.text,
                                           dob: HomeController.homecontroller.selectedDate
                                               .toString());
                                     });
-                                    HomeController.homecontroller.isUpdate = false;
+                                    HomeController.homecontroller.isUserUpdate = false;
                                     HomeController.homecontroller.txtup_name.clear();
                                     HomeController.homecontroller.txtup_email.clear();
                                     HomeController.homecontroller.txtup_password.clear();
@@ -242,25 +196,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           .homecontroller
                                           .calculateAge(HomeController.homecontroller.selectedDate);
 
-                                      DBHelper.dbHelper.insertData(
-                                          name: HomeController.homecontroller.txt_name.text,
-                                          email: HomeController.homecontroller.txt_email.text,
-                                          dob:
-                                              HomeController.homecontroller.selectedDate.toString(),
-                                          password: HomeController.homecontroller.txt_password.text,
-                                          confirmpass:
-                                              HomeController.homecontroller.txt_confirmPass.text);
+                                      DBHelper.dbHelper.insertsubUser(
+                                        userId: HomeController.homecontroller.index,
+                                        name: HomeController.homecontroller.txt_name.text,
+                                        email: HomeController.homecontroller.txt_email.text,
+                                        dob: HomeController.homecontroller.selectedDate.toString(),
+                                        password: HomeController.homecontroller.txt_password.text,
+                                      );
                                     });
                                     HomeController.homecontroller.txt_name.clear();
                                     HomeController.homecontroller.txt_email.clear();
                                     HomeController.homecontroller.txt_password.clear();
                                     HomeController.homecontroller.txt_confirmPass.clear();
-                                    HomeController.homecontroller.tabController.animateTo(2);
                                   }
                                 }
-                                HomeController.homecontroller.sort();
+                                Navigator.pop(context);
+                                dataController.readSubUser();
                               },
-                              child: HomeController.homecontroller.isUpdate
+                              child: HomeController.homecontroller.isUserUpdate
                                   ? Text(
                                       "Update",
                                       style: GoogleFonts.poppins(),

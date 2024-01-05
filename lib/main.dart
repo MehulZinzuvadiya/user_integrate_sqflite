@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'View/home_screen.dart';
+import 'View/sub_register_view.dart';
 
 void main() {
   runApp(GetMaterialApp(
@@ -13,6 +13,10 @@ void main() {
       GetPage(
         name: '/',
         page: () => HomeScreen(),
+      ),
+      GetPage(
+        name: '/subRegister',
+        page: () => SubRegisterScreen(),
       ),
     ],
   ));

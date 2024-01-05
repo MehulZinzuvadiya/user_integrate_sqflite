@@ -12,14 +12,12 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    HomeController.homecontroller.tabController =
-        TabController(vsync: this, length: 3);
+    HomeController.homecontroller.tabController = TabController(vsync: this, length: 3);
   }
 
   @override
@@ -30,9 +28,10 @@ class _HomeScreenState extends State<HomeScreen>
           child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "Sqflite User Integration",
+            "User Integration",
             style: GoogleFonts.poppins(),
           ),
+          centerTitle: true,
           bottom: TabBar(
               controller: HomeController.homecontroller.tabController,
               labelPadding: EdgeInsets.all(10),
